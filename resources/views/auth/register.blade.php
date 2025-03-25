@@ -44,7 +44,31 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <div class="row mb-3">
+                                        <label for="address" class="col-md-4 col-form-label text-md-end">{{ __('Address') }}</label>
+                                        <div class="col-md-6">
+                                            <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" 
+                                                name="address" value="{{ old('address') }}" required>
+                                            @error('address')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
 
+                                    <div class="row mb-3">
+                                        <label for="contact_number" class="col-md-4 col-form-label text-md-end">{{ __('Contact Number') }}</label>
+                                        <div class="col-md-6">
+                                            <input id="contact_number" type="text" class="form-control @error('contact_number') is-invalid @enderror" 
+                                                name="contact_number" value="{{ old('contact_number') }}" required>
+                                            @error('contact_number')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
