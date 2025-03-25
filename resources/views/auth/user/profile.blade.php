@@ -20,8 +20,12 @@
 
                         <div class="row mb-3">
                             <div class="col-md-12 text-center mb-3">
-                                <img src="{{ $user->photo ? asset($user->photo) : 'https://via.placeholder.com/150' }}" 
-                                     class="rounded-circle" alt="Profile Photo" style="max-width: 150px;">
+                            @if ($user->photo && file_exists(public_path('storage/' . $user->photo)))
+    <img src="{{ asset('storage/' . $user->photo) }}" alt="User Photo" class="rounded-circle" width="150" height="150">
+@else
+    <img src="{{ asset('images/default-user.png') }}" alt="Default User" class="rounded-circle" width="150" height="150">
+@endif
+
                             </div>
                         </div>
 

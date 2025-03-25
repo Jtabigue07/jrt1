@@ -59,7 +59,10 @@
                 </tr>
             </tfoot>
         </table>
-        <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+        <form action="{{ route('cart.checkout') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+</form>
     @else
         <p class="text-center">Your cart is empty.</p>
     @endif

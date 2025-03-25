@@ -28,12 +28,16 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'address' => ['nullable', 'string', 'max:255'], // Added address validation
+            'contact_number' => ['nullable', 'string', 'max:20'], // Added contact number validation
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->address = $request->address; // Added address
+        $user->contact_number = $request->contact_number; // Added contact number
 
         if ($request->hasFile('photo')) {
             // Delete old photo if exists
@@ -102,13 +106,14 @@ class UserController extends Controller
         }
     }
 
-    // ========== New Store Method ==========
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|string|min:6',
+            'address' => 'nullable|string|max:255', // Added address validation
+            'contact_number' => 'nullable|string|max:20', // Added contact number validation
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -118,6 +123,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'address' => $request->address, // Added address
+            'contact_number' => $request->contact_number, // Added contact number
             'photo' => $photoPath,
             'role' => $request->role ?? 'user',
             'status' => true,
@@ -126,7 +133,6 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
 
-    // ========== New Update Method ==========
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -134,6 +140,8 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'address' => 'nullable|string|max:255', // Added address validation
+            'contact_number' => 'nullable|string|max:20', // Added contact number validation
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -145,7 +153,13 @@ class UserController extends Controller
             $user->photo = $photoPath;
         }
 
-        $user->update($request->except('photo') + ['photo' => $user->photo]);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'address' => $request->address, // Added address
+            'contact_number' => $request->contact_number, // Added contact number
+            'photo' => $user->photo,
+        ]);
 
         return redirect()->route('admin.users.show', $user->id)->with('success', 'User updated successfully');
     }
